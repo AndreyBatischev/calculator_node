@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Калькулятор</title>
+</head>
+<body>
+  <div class="wrapper">
+    <h3>Калькулятор</h3>
+    <form id="calculator-form">
+      <div>
+        <label for="a">Число 1:</label>
+        <input type="number" id="a" name="a" required>
+      </div>
+      <br>
+     <div>
+      <label for="b">Число 2:</label>
+      <input type="number" id="b" name="b" required>
+     </div>
+      <br>
+      <div>
+        <label for="operation">Операция:</label>
+        <select id="operation" name="operation" required>
+          <option value="">Выберите операцию</option>
+          <option value="add">Сложение</option>
+          <option value="subtract">Вычитание</option>
+          <option value="multiply">Умножение</option>
+          <option value="divide">Деление</option>
+        </select>
+      </div>
+      <br>
+      <button type="submit">Вычислить</button>
+    </form>
+    <div>
+      <div id="result"></div>
+    </div>
+  
+  </div>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(document).ready(() => {
+      $('#calculator-form').submit((e) => {
+        e.preventDefault();
+        const a = $('#a').val();
+        const b = $('#b').val();
+        const operation = $('#operation').val();
+        const url = `/api/${operation}/${a}/${b}`;
+        $.get(url, (data) => {
+          $('#result').text(`Результат: ${data.result}`);
+        }).fail((xhr) => {
+          const message = xhr.responseJSON.error || 'Произошла ошибка';
+          $('#result').text(`Ошибка: ${message}`);
+        });
+      });
+    });
+  </script>
+
+  <style>
+    .wrapper{
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: 1px solid black;
+    padding: 0 20px;
+    border-radius: 10px;
+    min-height: 270px;
+  }
+
+  #result{
+    margin-top: 15px;
+  }
+  </style>
+</body>
+</html>
